@@ -1,10 +1,11 @@
 from fuzzywuzzy import fuzz
 from pptx2md.global_var import g
 import re
+import io
 
 class outputter(object):
     def __init__(self, file_path):
-        self.ofile = open(file_path, 'w', encoding='utf8')
+        self.ofile = io.open(file_path, 'w', encoding='utf8')
     def put_title(self, text, level):
         pass
     def put_list(self, text, level):
@@ -22,13 +23,13 @@ class outputter(object):
     def get_escaped(self, text):
         pass
     def write(self, text):
-        self.ofile.write(text)
+        self.ofile.write(text.decode('unicode_escape'))
 
 
 class md_outputter(outputter):
     # write outputs to markdown
     def __init__(self, file_path):
-        self.ofile = open(file_path, 'w', encoding='utf8')
+        self.ofile = io.open(file_path, 'w', encoding='utf8')
         self.esc_re1 = re.compile(r'([\\\*`!_\{\}\[\]\(\)#\+-\.])')
         self.esc_re2 = re.compile(r'(<[^>]+>)')
 
@@ -69,7 +70,7 @@ class md_outputter(outputter):
 class wiki_outputter(outputter):
     # write outputs to wikitext
     def __init__(self, file_path):
-        self.ofile = open(file_path, 'w', encoding='utf8')
+        self.ofile = io.open(file_path, 'w', encoding='utf8')
         self.esc_re = re.compile(r'<([^>]+)>')
 
     def put_title(self, text, level):
@@ -108,7 +109,7 @@ class wiki_outputter(outputter):
 class madoko_outputter(outputter):
     # write outputs to madoko markdown
     def __init__(self, file_path):
-        self.ofile = open(file_path, 'w', encoding='utf8')
+        self.ofile = io.open(file_path, 'w', encoding='utf8')
         self.ofile.write('[TOC]\n\n')
         self.esc_re1 = re.compile(r'([\\\*`!_\{\}\[\]\(\)#\+-\.])')
         self.esc_re2 = re.compile(r'(<[^>]+>)')
